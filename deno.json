@@ -1,6 +1,7 @@
 {
   "imports": {
-    "hono": "npm:hono@^4.6.7"
+    "hono": "npm:hono@^4.6.7",
+    "openai": "npm:openai@^4.68.4"
   },
   "tasks": {
     "start": "deno run --allow-net --watch main.ts"
