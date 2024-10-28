@@ -1,7 +1,9 @@
 import { Hono } from "hono";
 import { bearerAuth } from "hono/bearer-auth";
 import { bodyLimit } from "hono/body-limit";
+import { translate } from "./libs/api/index.ts";
 // import { basicAuth } from "hono/basic-auth";
+
 
 const readToken = "read";
 const prvilegedToekn = "read+write";
@@ -20,7 +22,8 @@ app.on(privilegedMethods, "/api/page/*", async (c, next) => {
 });
 
 app.get("/api/page/x", async (c) => {
-  return c.json({ message: "Hello Hono!" });
+  const res = await translate("environment")
+  return c.json(res);
 });
 
 app.use(
@@ -37,6 +40,8 @@ app.post("/api/page/x", async (c) => {
   console.log("body", body);
   return c.json({ message: "Hello POST - Hono!" });
 });
+
+//==================================================================================================
 
 // const token = "honosicool";
 
