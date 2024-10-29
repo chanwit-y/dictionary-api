@@ -1,3 +1,4 @@
+import { findAll } from './libs/db/index.ts';
 import { Hono } from "hono";
 import { bearerAuth } from "hono/bearer-auth";
 import { bodyLimit } from "hono/body-limit";
@@ -22,7 +23,8 @@ app.on(privilegedMethods, "/api/page/*", async (c, next) => {
 });
 
 app.get("/api/page/x", async (c) => {
-  const res = await translate("environment")
+const res = await findAll("eng_to_tha") 
+  // const res = await translate("environment")
   return c.json(res);
 });
 
