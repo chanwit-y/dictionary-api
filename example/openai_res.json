@@ -1,0 +1,30 @@
+{
+	"id": "chatcmpl-AOEWRi8rpp3sxiTMcCEBCm25Qx39r",
+	"object": "chat.completion",
+	"created": 1730339059,
+	"model": "gpt-4o-2024-08-06",
+	"choices": [
+		{
+			"index": 0,
+			"message": {
+				"role": "assistant",
+				"content": "- แปลเป็นภาษาไทย: บรรพบุรุษ, สิ่งที่มาก่อน\n- คำอ่านในภาษาอังกฤษ: แอน-ติ-ซี-เดนท์\n- ประเภทของคำ: คำนาม (Noun)\n- ตัวอย่างประโยคในภาษาอังกฤษ: In grammar, the noun \"dog\" is the antecedent of the pronoun \"it\" in the sentence \"The dog chased its tail.\"",
+				"refusal": null
+			},
+			"logprobs": null,
+			"finish_reason": "stop"
+		}
+	],
+	"usage": {
+		"prompt_tokens": 44,
+		"completion_tokens": 91,
+		"total_tokens": 135,
+		"prompt_tokens_details": {
+			"cached_tokens": 0
+		},
+		"completion_tokens_details": {
+			"reasoning_tokens": 0
+		}
+	},
+	"system_fingerprint": "fp_159d8341cc"
+}

@@ -1,8 +1,10 @@
 import { Hono } from "hono";
 import { bearerAuth } from "hono/bearer-auth";
 import { bodyLimit } from "hono/body-limit";
-import { translate } from "./libs/api/index.ts";
-// import { basicAuth } from "hono/basic-auth";
+import { VocabularyService } from "./libs/service/vocabulary.service.ts";
+import { VocabularyRepository } from "./libs/repository/vocabulary.repo.ts";
+import { supabase } from "./libs/db/index.ts";
+import { OpenAIAPI } from "./libs/api/openai.api.ts";
 
 
 const readToken = "read";
@@ -11,35 +13,44 @@ const privilegedMethods = ["POST", "PUT", "PATCH", "DELETE"];
 
 const app = new Hono();
 
-app.on("GET", "/api/page/*", async (c, next) => {
+app.on("GET", "/api/*", async (c, next) => {
   const brearer = bearerAuth({ token: [readToken, prvilegedToekn] });
   return brearer(c, next);
 });
 
-app.on(privilegedMethods, "/api/page/*", async (c, next) => {
+app.on(privilegedMethods, "/api/*", async (c, next) => {
   const bearer = bearerAuth({ token: prvilegedToekn });
   return bearer(c, next);
 });
 
 app.get("/api/page/x", async (c) => {
-  const res = await translate("environment")
+  // const res = await translate("antecedent")
+  // return c.json(res);
+});
+
+app.post("/api/vocabulary", async (c) => {
+  const body = await c.req.json<{word: string}>();
+  console.log("body", body.word);
+  const srv = new VocabularyService(new VocabularyRepository(supabase), new OpenAIAPI());
+  const res = await srv.insert(body.word);
+  console.log("res", res);
   return c.json(res);
-});
+})
 
-app.use(
-  bodyLimit({
-    maxSize: 1 * 1024,
-    onError: (c) => {
-      return c.text("overflow :(", 413);
-    },
-  })
-);
+// app.use(
+//   bodyLimit({
+//     maxSize: 1 * 1024,
+//     onError: (c) => {
+//       return c.text("overflow :(", 413);
+//     },
+//   })
+// );
 
-app.post("/api/page/x", async (c) => {
-  const body = await c.req.json();
-  console.log("body", body);
-  return c.json({ message: "Hello POST - Hono!" });
-});
+// app.post("/api/page/x", async (c) => {
+//   const body = await c.req.json();
+//   console.log("body", body);
+//   return c.json({ message: "Hello POST - Hono!" });
+// });
 
 //==================================================================================================
 
