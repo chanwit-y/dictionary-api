@@ -1,5 +1,9 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { injectable } from "inversify";
 import { Env } from "../config/index.ts";
+import { supabase } from "../db/index.ts";
+
+import "reflect-metadata";
 
 type TVocabulary = {
   word: string;
@@ -7,10 +11,18 @@ type TVocabulary = {
   remark: string;
 };
 
+export interface IVocabularyRepository {
+  findAll(): Promise<unknown>;
+  findByWord(word: string): Promise<any[]>;
+  insert(v: TVocabulary): Promise<unknown>;
+}
+
 const TableName = "vocabulary";
 
-export class VocabularyRepository {
-  constructor(private _db: SupabaseClient) {}
+@injectable()
+export class VocabularyRepository implements IVocabularyRepository {
+  private _db: SupabaseClient = supabase;
+  constructor() {}
 
   public async findAll() {
     const { data, error } = await this._db.from(TableName).select("*");

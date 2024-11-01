@@ -1,3 +1,4 @@
+import { injectable  } from "inversify";
 import OpenAI from "openai";
 import { Env } from "../config/index.ts";
 
@@ -5,6 +6,7 @@ const openai = new OpenAI({
   apiKey: Env.openaiApiKey,
 });
 
+@injectable()
 export class OpenAIAPI {
   public async translate(word: string) {
     return await openai.chat.completions.create({

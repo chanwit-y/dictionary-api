@@ -12,7 +12,9 @@
     "npm:@supabase/storage-js@2.7.1": "2.7.1",
     "npm:@types/node@*": "22.5.4",
     "npm:hono@^4.6.7": "4.6.7",
-    "npm:openai@^4.68.4": "4.68.4"
+    "npm:inversify@^6.0.3": "6.0.3",
+    "npm:openai@^4.68.4": "4.68.4",
+    "npm:reflect-metadata@~0.2.2": "0.2.2"
   },
   "jsr": {
     "@std/dotenv@0.225.2": {
@@ -152,6 +154,9 @@
         "ms"
       ]
     },
+    "inversify@6.0.3": {
+      "integrity": "sha512-s/svzcRQ/scaGUUyaVtFSL1dvOaRgyvE7VvpGcJwXmFz7CCzfSfxC/Uyl7iSHDEmBabJ2gbDES72DaygtMmwvg=="
+    },
     "mime-db@1.52.0": {
       "integrity": "sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg=="
     },
@@ -185,6 +190,9 @@
         "node-fetch"
       ]
     },
+    "reflect-metadata@0.2.2": {
+      "integrity": "sha512-urBwgfrvVP/eAyXx4hluJivBKzuEbSQs9rKWCrCkbSxNv8mxPcUZKeuoF3Uy4mJl3Lwprp6yy5/39VWigZ4K6Q=="
+    },
     "tr46@0.0.3": {
       "integrity": "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw=="
     },
@@ -215,7 +223,9 @@
     "dependencies": [
       "jsr:@supabase/supabase-js@^2.45.6",
       "npm:hono@^4.6.7",
-      "npm:openai@^4.68.4"
+      "npm:inversify@^6.0.3",
+      "npm:openai@^4.68.4",
+      "npm:reflect-metadata@~0.2.2"
     ]
   }
 }

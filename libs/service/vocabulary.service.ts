@@ -1,11 +1,27 @@
-import type { VocabularyRepository } from "../repository/vocabulary.repo.ts";
+import { injectable, inject } from "inversify";
+import type { IVocabularyRepository, VocabularyRepository } from "../repository/vocabulary.repo.ts";
 import { OpenAIAPI } from "./../api/openai.api.ts";
 
-export class VocabularyService {
+import "reflect-metadata";
+
+export interface IVocabularyService {
+  insert(word: string): Promise<any>;
+}
+
+
+@injectable()
+export class VocabularyService implements IVocabularyService {
+  // constructor(private _repo: VocabularyRepository, private _openai: OpenAIAPI) {}
+  private _repo: IVocabularyRepository;
+  private _openai: OpenAIAPI;
+
   constructor(
-    private _repo: VocabularyRepository,
-    private _openai: OpenAIAPI
-  ) {}
+    @inject("VocabularyRepository") repo: IVocabularyRepository,
+    @inject("OpenAIAPI") openai: OpenAIAPI
+  ) {
+    this._repo = repo;
+    this._openai = openai;
+  }
 
   public async insert(word: string) {
     let vocabulary;
