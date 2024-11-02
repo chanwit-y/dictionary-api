@@ -82,8 +82,8 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: "chanwit-y-dictionary-25"
-          entrypoint: "main.ts"
+          entrypoint: "./main.ts"
           root: ""
-          include: ".env"
+          include: "./.env"
           
           
