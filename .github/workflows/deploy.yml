@@ -11,22 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     environment: production
+
     steps:
-    - name: Use variables
-      run: |
-        echo "OPENAI_API_KEY variable : $OPENAI_API_KEY"
-        echo "SUPABASE_URL variable : $SUPABASE_URL"
-        echo "SUPABASE_KEY variable : $SUPABASE_KEY"
-        echo "SUPABASE_USER variable  : $SUPABASE_USER"
-        echo "SUPABASE_PASS variable : $SUPABASE_PASS"
-        echo "SUPABASE_TOKEN variable : $SUPABASE_TOKEN"
-      env:
-        OPENAI_API_KEY: ${{ vars.OPENAI_API_KEY }}
-        SUPABASE_URL: ${{ vars.SUPABASE_URL }}
-        SUPABASE_KEY: ${{ vars.SUPABASE_KEY }}
-        SUPABASE_USER: ${{ vars.SUPABASE_USER }}
-        SUPABASE_PASS: ${{ vars.SUPABASE_PASS }}
-        SUPABASE_TOKEN: ${{ vars.SUPABASE_TOKEN }}
+      - name: Echo OPENAI_API_KEY
+      - run: "echo $OPENAI_API_KEY"
+    #  env:
+    #     OPENAI_API_KEY: ${{ vars.OPENAI_API_KEY }}
+    #     SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+    #     SUPABASE_KEY: ${{ vars.SUPABASE_KEY }}
+    #     SUPABASE_USER: ${{ vars.SUPABASE_USER }}
+    #     SUPABASE_PASS: ${{ vars.SUPABASE_PASS }}
+    #     SUPABASE_TOKEN: ${{ vars.SUPABASE_TOKEN }}
 
 
     permissions:
