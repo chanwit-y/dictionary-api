@@ -42,7 +42,8 @@ jobs:
           node-version: lts/*
 
       - name: Create dot env
-        run: "cat <<OPENAI_API_KEY=${{ vars.OPENAI_API_KEY }} > .env
+        run: "cat <<EOF > .env
+              OPENAI_API_KEY=${{ vars.OPENAI_API_KEY }}
               SUPABASE_URL=${{ vars.SUPABASE_URL }}
               SUPABASE_KEY=${{ vars.SUPABASE_KEY }}
               SUPABASE_USER=${{ vars.SUPABASE_USER }}
