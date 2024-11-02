@@ -10,24 +10,11 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
 
-    environment: production
-
-    # steps:
-    #  env:
-    #     OPENAI_API_KEY: ${{ vars.OPENAI_API_KEY }}
-    #     SUPABASE_URL: ${{ vars.SUPABASE_URL }}
-    #     SUPABASE_KEY: ${{ vars.SUPABASE_KEY }}
-    #     SUPABASE_USER: ${{ vars.SUPABASE_USER }}
-    #     SUPABASE_PASS: ${{ vars.SUPABASE_PASS }}
-    #     SUPABASE_TOKEN: ${{ vars.SUPABASE_TOKEN }}
-
-
     permissions:
       id-token: write # Needed for auth with Deno Deploy
       contents: read # Needed to clone the repository
 
     steps:
-
       - name: Clone repository
         uses: actions/checkout@v4
 
@@ -41,49 +28,14 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: Create dot env
-        run: "echo OPENAI_API_KEY=${{ vars.OPENAI_API_KEY }} > .env"
-
-      - name: Append to dot env
-        run: "echo SUPABASE_URL=${{ vars.SUPABASE_URL }} >> .env"
-
-      - name: Append to dot env
-        run: "echo SUPABASE_KEY=${{ vars.SUPABASE_KEY }} >> .env"
-
-      - name: Append to dot env
-        run: "echo SUPABASE_USER=${{ vars.SUPABASE_USER }} >> .env"
-
-      - name: Append to dot env
-        run: "echo SUPABASE_PASS=${{ vars.SUPABASE_PASS }} >> .env"
-
-      - name: Echo dot env file
-        run: echo "$(<.env )"
-
-      # - name: Echo openai_api_key
-      #   run: "echo openai_api_key variable : ${{vars.OPENAI_API_KEY}}"
-      #   env: 
-      #     OPENAI_API_KEY: ${{ vars.OPENAI_API_KEY }}
-      #     SUPABASE_URL: ${{ vars.SUPABASE_URL }}
-      #     SUPABASE_KEY: ${{ vars.SUPABASE_KEY }}
-      #     SUPABASE_USER: ${{ vars.SUPABASE_USER }}
-      #     SUPABASE_PASS: ${{ vars.SUPABASE_PASS }}
-      #     SUPABASE_TOKEN: ${{ vars.SUPABASE_TOKEN }}
-
-      # - name: check env 
-      #   run: "env"
-
       - name: Install step
         run: "deno install"
-
-      - name: List all files
-        run: "ls -la"
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
           project: "chanwit-y-dictionary-25"
-          entrypoint: "./main.ts"
+          entrypoint: "main.ts"
           root: ""
-          include: "./.env"
           
           
