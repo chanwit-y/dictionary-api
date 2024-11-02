@@ -12,9 +12,7 @@ jobs:
 
     environment: production
 
-    steps:
-      - name: Echo OPENAI_API_KEY
-      - run: "echo $OPENAI_API_KEY"
+    # steps:
     #  env:
     #     OPENAI_API_KEY: ${{ vars.OPENAI_API_KEY }}
     #     SUPABASE_URL: ${{ vars.SUPABASE_URL }}
@@ -29,6 +27,7 @@ jobs:
       contents: read # Needed to clone the repository
 
     steps:
+
       - name: Clone repository
         uses: actions/checkout@v4
 
@@ -41,6 +40,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
+
+      - name: Echo OPENAI_API_KEY
+        run: echo $OPENAI_API_KEY
 
       - name: check env 
         run: "env"
