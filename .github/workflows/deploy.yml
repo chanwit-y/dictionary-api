@@ -42,7 +42,7 @@ jobs:
           node-version: lts/*
 
       - name: Echo OPENAI_API_KEY
-        run: "repository variable : $OPENAI_API_KEY"
+        run: "echo repository variable : $OPENAI_API_KEY"
 
       - name: check env 
         run: "env"
