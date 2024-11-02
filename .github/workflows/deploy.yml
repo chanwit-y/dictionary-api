@@ -42,13 +42,12 @@ jobs:
           node-version: lts/*
 
       - name: Create dot env
-        run: |
-             "echo OPENAI_API_KEY=${{ vars.OPENAI_API_KEY }} > .env"
-             "echo SUPABASE_URL=${{ vars.SUPABASE_URL }} >> .env"
-             "echo SUPABASE_KEY=${{ vars.SUPABASE_KEY }} >> .env"
-             "echo SUPABASE_USER=${{ vars.SUPABASE_USER }} >> .env"
-             "echo SUPABASE_PASS=${{ vars.SUPABASE_PASS }} >> .env"
-            #  "echo SUPABASE_KEY=${{ vars.SUPABASE_KEY }} >> .env"
+        run: "cat <<OPENAI_API_KEY=${{ vars.OPENAI_API_KEY }} > .env
+              SUPABASE_URL=${{ vars.SUPABASE_URL }}
+              SUPABASE_KEY=${{ vars.SUPABASE_KEY }}
+              SUPABASE_USER=${{ vars.SUPABASE_USER }}
+              SUPABASE_PASS=${{ vars.SUPABASE_PASS }}
+              EOF"
 
       - name: Echo dot env file
         run: echo "$(<.env )"
