@@ -41,6 +41,14 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: Create dot env
+        run: |
+              "echo OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} > .env"
+              "echo SUPABASE_URL=${{ secrets.SUPABASE_URL }} >> .env"
+
+      - name: Echo dot env file
+        run: echo "$(<.env )"
+
       - name: Echo openai_api_key
         run: "echo openai_api_key variable : ${{vars.OPENAI_API_KEY}}"
         env: 
@@ -63,5 +71,6 @@ jobs:
           project: "chanwit-y-dictionary-25"
           entrypoint: "main.ts"
           root: ""
+          include: ".env"
           
           
