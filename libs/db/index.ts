@@ -1,8 +1,8 @@
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import { Env } from "../config/index.ts";
 
-const supabaseUrl = Env.supabaseUrl!;
-const supabaseKey = Env.supabaseKey!;
+const supabaseUrl = Env.supabaseUrl ?? "";
+const supabaseKey = Env.supabaseKey ?? "";
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
 // export const findAll = async (table: string) => {
