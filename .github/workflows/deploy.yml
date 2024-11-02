@@ -43,21 +43,21 @@ jobs:
 
       - name: Create dot env
         run: |
-              "echo OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} > .env"
-              "echo SUPABASE_URL=${{ secrets.SUPABASE_URL }} >> .env"
+              "echo OPENAI_API_KEY=${{ vars.OPENAI_API_KEY }} > .env"
+              "echo SUPABASE_URL=${{ vars.SUPABASE_URL }} >> .env"
 
       - name: Echo dot env file
         run: echo "$(<.env )"
 
-      - name: Echo openai_api_key
-        run: "echo openai_api_key variable : ${{vars.OPENAI_API_KEY}}"
-        env: 
-          OPENAI_API_KEY: ${{ vars.OPENAI_API_KEY }}
-          SUPABASE_URL: ${{ vars.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ vars.SUPABASE_KEY }}
-          SUPABASE_USER: ${{ vars.SUPABASE_USER }}
-          SUPABASE_PASS: ${{ vars.SUPABASE_PASS }}
-          SUPABASE_TOKEN: ${{ vars.SUPABASE_TOKEN }}
+      # - name: Echo openai_api_key
+      #   run: "echo openai_api_key variable : ${{vars.OPENAI_API_KEY}}"
+      #   env: 
+      #     OPENAI_API_KEY: ${{ vars.OPENAI_API_KEY }}
+      #     SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+      #     SUPABASE_KEY: ${{ vars.SUPABASE_KEY }}
+      #     SUPABASE_USER: ${{ vars.SUPABASE_USER }}
+      #     SUPABASE_PASS: ${{ vars.SUPABASE_PASS }}
+      #     SUPABASE_TOKEN: ${{ vars.SUPABASE_TOKEN }}
 
       # - name: check env 
       #   run: "env"
