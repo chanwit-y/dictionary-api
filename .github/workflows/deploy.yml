@@ -41,11 +41,11 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: Echo OPENAI_API_KEY
-        run: "echo repository variable : $OPENAI_API_KEY"
+      - name: Echo openai_api_key
+        run: "echo openai_api_key variable : ${{vars.OPENAI_API_KEY}}"
 
-      - name: check env 
-        run: "env"
+      # - name: check env 
+      #   run: "env"
 
       - name: Install step
         run: "deno install"
