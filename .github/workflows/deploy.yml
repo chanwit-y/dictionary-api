@@ -42,7 +42,13 @@ jobs:
           node-version: lts/*
 
       - name: Create dot env
-        run: "echo OPENAI_API_KEY=${{ vars.OPENAI_API_KEY }} > .env"
+        run: |
+             "echo OPENAI_API_KEY=${{ vars.OPENAI_API_KEY }} > .env"
+             "echo SUPABASE_URL=${{ vars.SUPABASE_URL }} >> .env"
+             "echo SUPABASE_KEY=${{ vars.SUPABASE_KEY }} >> .env"
+             "echo SUPABASE_USER=${{ vars.SUPABASE_USER }} >> .env"
+             "echo SUPABASE_PASS=${{ vars.SUPABASE_PASS }} >> .env"
+            #  "echo SUPABASE_KEY=${{ vars.SUPABASE_KEY }} >> .env"
 
       - name: Echo dot env file
         run: echo "$(<.env )"
@@ -62,6 +68,9 @@ jobs:
 
       - name: Install step
         run: "deno install"
+
+      - name: List all files
+        run: "ls -la"
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
