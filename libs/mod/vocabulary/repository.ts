@@ -15,7 +15,10 @@ export interface IVocabularyRepository {
   findAll(): Promise<unknown>;
   findByWord(word: string): Promise<any[]>;
   insert(v: TVocabulary): Promise<unknown>;
+  // TODO: move to auth service file
   auth(): Promise<any>;
+  getUser(token: string): Promise<any>;
+
 }
 
 const TableName = "vocabulary";
@@ -52,6 +55,11 @@ export class VocabularyRepository implements IVocabularyRepository {
       password: Env.supabasePass!,
     });
 
+    return res;
+  }
+
+  public async getUser(token: string) {
+    const res = await this._db.auth.getUser(token);
     return res;
   }
 

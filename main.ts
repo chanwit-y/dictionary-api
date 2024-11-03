@@ -25,6 +25,13 @@ app.get("/api/auth", async (c) => {
   return c.json(res);
 });
 
+app.post("/api/get-user", async (c) => {
+  const body = await c.req.json<{ token: string }>();
+  const srv = container.get<IVocabularyService>(Instances.VocabularyService); 
+  const res = await srv.getUser(body.token);
+  return c.json(res);
+})
+
 app.post("/api/vocabulary", async (c) => {
   const body = await c.req.json<{ word: string }>();
   console.log("body", body.word);
