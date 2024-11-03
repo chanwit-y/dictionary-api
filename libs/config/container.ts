@@ -2,12 +2,12 @@ import { Container } from "inversify";
 import {
   VocabularyRepository,
   type IVocabularyRepository,
-} from "../repository/vocabulary.repo.ts";
+} from "../mod/vocabulary/repository.ts";
 import { OpenAIAPI } from "../api/openai.api.ts";
 import {
   VocabularyService,
   type IVocabularyService,
-} from "../service/vocabulary.service.ts";
+} from "../mod/vocabulary/service.ts";
 
 enum Instances {
   OpenAIAPI = "OpenAIAPI",

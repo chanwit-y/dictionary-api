@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { injectable } from "inversify";
-import { Env } from "../config/index.ts";
-import { supabase } from "../db/index.ts";
+import { Env } from "../../config/index.ts";
+import { supabase } from "../../db/index.ts";
 
 import "reflect-metadata";
 
@@ -15,6 +15,7 @@ export interface IVocabularyRepository {
   findAll(): Promise<unknown>;
   findByWord(word: string): Promise<any[]>;
   insert(v: TVocabulary): Promise<unknown>;
+  auth(): Promise<any>;
 }
 
 const TableName = "vocabulary";
@@ -45,12 +46,22 @@ export class VocabularyRepository implements IVocabularyRepository {
     return data;
   }
 
-  public async insert(v: TVocabulary) {
-    const auth = await this._db.auth.signInWithPassword({
+  public async auth() {
+    const res = await this._db.auth.signInWithPassword({
       email: Env.supabaseUser!,
       password: Env.supabasePass!,
     });
-    console.log("auth", auth);
+
+    return res;
+  }
+
+  public async insert(v: TVocabulary) {
+    // const auth = await this._db.auth.signInWithPassword({
+    //   email: Env.supabaseUser!,
+    //   password: Env.supabasePass!,
+    // });
+
+    // console.log("auth", auth);
     const { data, error } = await this._db.from(TableName).insert([{ ...v }]);
     if (error) {
       console.error(error);

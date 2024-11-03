@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { bearerAuth } from "hono/bearer-auth";
 import { container, Instances } from "./libs/config/container.ts";
-import type { IVocabularyService } from "./libs/service/vocabulary.service.ts";
+import type { IVocabularyService } from "./libs/mod/vocabulary/service.ts";
 
 const readToken = "read";
 const prvilegedToekn = "read+write";
@@ -19,10 +19,11 @@ app.on(privilegedMethods, "/api/*", (c, next) => {
   return bearer(c, next);
 });
 
-// app.get("/api/page/x", async (c) => {
-//   // const res = await translate("antecedent")
-//   // return c.json(res);
-// });
+app.get("/api/auth", async (c) => {
+  const srv = container.get<IVocabularyService>(Instances.VocabularyService); 
+  const res = await srv.auth();
+  return c.json(res);
+});
 
 app.post("/api/vocabulary", async (c) => {
   const body = await c.req.json<{ word: string }>();

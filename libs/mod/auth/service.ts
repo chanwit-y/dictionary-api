@@ -1,4 +1,4 @@
-import { supabase } from './../db/index.ts';
+import { supabase } from '../../db/index.ts';
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 type User = {
