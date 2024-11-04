@@ -1,3 +1,4 @@
+import type { AuthTokenResponsePassword } from "@supabase/supabase-js";
 import { IUserRepository } from './repository.ts';
 import { inject, injectable } from "inversify";
 
@@ -7,7 +8,7 @@ type User = {
 };
 
 export interface IUserService {
-  signIn(username: string, password: string): Promise<any>;
+  signIn(username: string, password: string): Promise<AuthTokenResponsePassword>;
 }
 
 @injectable()

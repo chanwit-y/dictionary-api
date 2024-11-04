@@ -1,24 +1,24 @@
 import { Hono } from "hono";
-import { bearerAuth } from "hono/bearer-auth";
+// import { bearerAuth } from "hono/bearer-auth";
 import { container, Instances } from "./libs/config/container.ts";
 import type { IVocabularyService } from "./libs/mod/vocabulary/service.ts";
-import authRoutes from "./libs/mod/vocabulary/routes.ts";
+import authRoutes from "./libs/mod/auth/routes.ts";
 
-const readToken = "read";
-const prvilegedToekn = "read+write";
-const privilegedMethods = ["POST", "PUT", "PATCH", "DELETE"];
+// const readToken = "read";
+// const prvilegedToekn = "read+write";
+// const privilegedMethods = ["POST", "PUT", "PATCH", "DELETE"];
 
 const app = new Hono();
 
-const brearer = bearerAuth({ token: [readToken, prvilegedToekn] });
-app.on("GET", "/api/*", (c, next) => {
-  return brearer(c, next);
-});
+// const brearer = bearerAuth({ token: [readToken, prvilegedToekn] });
+// app.on("GET", "/api/*", (c, next) => {
+//   return brearer(c, next);
+// });
 
-app.on(privilegedMethods, "/api/*", (c, next) => {
-  const bearer = bearerAuth({ token: prvilegedToekn });
-  return bearer(c, next);
-});
+// app.on(privilegedMethods, "/api/*", (c, next) => {
+//   const bearer = bearerAuth({ token: prvilegedToekn });
+//   return bearer(c, next);
+// });
 
 // app.get("/api/auth", async (c) => {
 //   const srv = container.get<IVocabularyService>(Instances.VocabularyService);
