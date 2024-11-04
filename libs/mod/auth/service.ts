@@ -1,23 +1,34 @@
-import { supabase } from '../../db/index.ts';
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { IUserRepository } from './repository.ts';
+import { inject, injectable } from "inversify";
 
 type User = {
   username: string;
   password: string;
 };
 
-class UserService {
-  constructor(private _db: SupabaseClient) {}
-
-  public async insert(u: User) {
-    const { data, error } = await this._db.from("users").insert([u]);
-    if (error) {
-      console.error(error);
-      throw new Error(`Failed to insert user: ${error.message}`);
-    }
-    return data;
-  }
+export interface IUserService {
+  signIn(username: string, password: string): Promise<any>;
 }
 
+@injectable()
+export class UserService implements IUserService {
 
-export default new UserService(supabase);
+  private _repo: IUserRepository;
+
+  constructor(@inject("UserRepository") repo: IUserRepository) {
+    this._repo = repo;
+  }
+
+  public async signIn(username: string, password: string) {
+    return await this._repo.signIn(username, password);
+  }
+
+  // public async insert(u: User) {
+  //   const { data, error } = await this._db.from("users").insert([u]);
+  //   if (error) {
+  //     console.error(error);
+  //     throw new Error(`Failed to insert user: ${error.message}`);
+  //   }
+  //   return data;
+  // }
+}

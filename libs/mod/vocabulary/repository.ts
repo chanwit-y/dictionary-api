@@ -15,9 +15,6 @@ export interface IVocabularyRepository {
   findAll(): Promise<unknown>;
   findByWord(word: string): Promise<any[]>;
   insert(v: TVocabulary): Promise<unknown>;
-  // TODO: move to auth service file
-  auth(): Promise<any>;
-  getUser(token: string): Promise<any>;
 
 }
 
@@ -48,21 +45,6 @@ export class VocabularyRepository implements IVocabularyRepository {
     }
     return data;
   }
-
-  public async auth() {
-    const res = await this._db.auth.signInWithPassword({
-      email: Env.supabaseUser!,
-      password: Env.supabasePass!,
-    });
-
-    return res;
-  }
-
-  public async getUser(token: string) {
-    const res = await this._db.auth.getUser(token);
-    return res;
-  }
-
   public async insert(v: TVocabulary) {
     // const auth = await this._db.auth.signInWithPassword({
     //   email: Env.supabaseUser!,

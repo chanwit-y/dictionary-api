@@ -7,8 +7,8 @@ import "reflect-metadata";
 export interface IVocabularyService {
   insert(word: string): Promise<any>;
   // TODO: move to auth service file
-  auth(): Promise<any>;
-  getUser(token: string): Promise<any>;
+  // auth(): Promise<any>;
+  // getUser(token: string): Promise<any>;
 }
 
 @injectable()
@@ -25,15 +25,15 @@ export class VocabularyService implements IVocabularyService {
     this._openai = openai;
   }
 
-  public async auth() {
-    const res = await this._repo.auth();
-    return res;
-  }
+  // public async auth() {
+  //   const res = await this._repo.auth();
+  //   return res;
+  // }
 
-  public async getUser(token: string) {
-    const res = await this._repo.getUser(token);
-    return res;
-  }
+  // public async getUser(token: string) {
+  //   const res = await this._repo.getUser(token);
+  //   return res;
+  // }
 
   public async insert(word: string) {
     let vocabulary;

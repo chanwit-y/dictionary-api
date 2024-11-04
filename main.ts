@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { bearerAuth } from "hono/bearer-auth";
 import { container, Instances } from "./libs/config/container.ts";
 import type { IVocabularyService } from "./libs/mod/vocabulary/service.ts";
+import authRoutes from "./libs/mod/vocabulary/routes.ts";
 
 const readToken = "read";
 const prvilegedToekn = "read+write";
@@ -19,23 +20,25 @@ app.on(privilegedMethods, "/api/*", (c, next) => {
   return bearer(c, next);
 });
 
-app.get("/api/auth", async (c) => {
-  const srv = container.get<IVocabularyService>(Instances.VocabularyService); 
-  const res = await srv.auth();
-  return c.json(res);
-});
+// app.get("/api/auth", async (c) => {
+//   const srv = container.get<IVocabularyService>(Instances.VocabularyService);
+//   const res = await srv.auth();
+//   return c.json(res);
+// });
 
-app.post("/api/get-user", async (c) => {
-  const body = await c.req.json<{ token: string }>();
-  const srv = container.get<IVocabularyService>(Instances.VocabularyService); 
-  const res = await srv.getUser(body.token);
-  return c.json(res);
-})
+// app.post("/api/get-user", async (c) => {
+//   const body = await c.req.json<{ token: string }>();
+//   const srv = container.get<IVocabularyService>(Instances.VocabularyService);
+//   const res = await srv.getUser(body.token);
+//   return c.json(res);
+// })
+
+app.route("/auth", authRoutes);
 
 app.post("/api/vocabulary", async (c) => {
   const body = await c.req.json<{ word: string }>();
   console.log("body", body.word);
-  const srv = container.get<IVocabularyService>(Instances.VocabularyService); 
+  const srv = container.get<IVocabularyService>(Instances.VocabularyService);
   // const srv = new VocabularyService(
   //   new VocabularyRepository(),
   //   new OpenAIAPI()

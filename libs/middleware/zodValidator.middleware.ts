@@ -2,6 +2,8 @@ import type { Context, Env, MiddlewareHandler, TypedResponse } from "hono";
 import type { ZodError, ZodSchema } from "zod";
 
 import { ValidationTargets } from "hono";
+import { fromZodError } from "zod-validation-error";
+
 import { validator } from "hono/validator";
 import { z } from "zod";
 
@@ -11,9 +13,10 @@ export type Hook<
   P extends string,
   O = Record<string | number | symbol, never>
 > = (
-  result:
-    | { success: true; data: T }
-    | { success: false; error: ZodError; data: T },
+  result: { success: boolean; data: T; error?: ZodError },
+  //   result:
+  //     | { success: true; data: T }
+  //     | { success: false; error: ZodError; data: T },
   c: Context<E, P>
 ) =>
   | Response
@@ -55,10 +58,33 @@ export const zValidator = <
   hook?: Hook<z.infer<T>, E, P>
 ): MiddlewareHandler<E, P, V> =>
   validator(target, async (v, c) => {
-    const result = await schema.safeParseAsync(v);
+    const { success, data, error } = await schema.safeParseAsync(v);
     if (hook) {
-//       const hookResult = hook({ ...result }, c);
+      const hookResult = hook({ success, data, error }, c);
+      if (hookResult) {
+        if (
+          (hookResult && hookResult instanceof Response) ||
+          hookResult instanceof Promise
+        ) {
+          return hookResult;
+        }
+        if ("response" in hookResult) {
+          return hookResult["response"];
+        }
+
+        if (!success) {
+          const validationError = fromZodError(error);
+
+          return c.json(
+            {
+              message: validationError.message,
+              errors: validationError.details,
+            },
+            400
+          );
+        }
+      }
     }
 
-    return {} as any;
+    return data;
   });
