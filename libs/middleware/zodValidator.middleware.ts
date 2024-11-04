@@ -5,9 +5,14 @@ import { ValidationTargets } from "hono";
 import { validator } from "hono/validator";
 import { z } from "zod";
 
-export type Hook<T, E extends Env, P extends string, O = {}> = (
+export type Hook<
+  T,
+  E extends Env,
+  P extends string,
+  O = Record<string | number | symbol, never>
+> = (
   result:
-    | { susscess: true; data: T }
+    | { success: true; data: T }
     | { success: false; error: ZodError; data: T },
   c: Context<E, P>
 ) =>
@@ -26,18 +31,34 @@ export const zValidator = <
   I = z.input<T>,
   O = z.output<T>,
   V extends {
-    in: HasUndefined<I> extends true
-      ? { [K in Target]?: I }
-      : { [K in Target]: I };
+    in: {
+      [K in Target]: K extends "json"
+        ? I
+        : {
+            [x: string]: ValidationTargets[K][string];
+          };
+    };
     out: { [K in Target]: O };
   } = {
-    in: HasUndefined<I> extends true
-      ? { [K in Target]?: I }
-      : { [K in Target]: I };
+    in: {
+      [K in Target]: K extends "json"
+        ? I
+        : {
+            [x: string]: ValidationTargets[K][string];
+          };
+    };
     out: { [K in Target]: O };
   }
 >(
   target: Target,
   schema: T,
   hook?: Hook<z.infer<T>, E, P>
-): MiddlewareHandler<E, P, V> => validator();
+): MiddlewareHandler<E, P, V> =>
+  validator(target, async (v, c) => {
+    const result = await schema.safeParseAsync(v);
+    if (hook) {
+//       const hookResult = hook({ ...result }, c);
+    }
+
+    return {} as any;
+  });
