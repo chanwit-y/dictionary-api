@@ -1,10 +1,12 @@
 {
   "imports": {
     "@supabase/supabase-js": "jsr:@supabase/supabase-js@^2.45.6",
-    "hono": "npm:hono@^4.6.7",
+    "hono": "npm:hono@^4.6.9",
     "inversify": "npm:inversify@^6.0.3",
     "openai": "npm:openai@^4.68.4",
-    "reflect-metadata": "npm:reflect-metadata@^0.2.2"
+    "reflect-metadata": "npm:reflect-metadata@^0.2.2",
+    "zod": "npm:zod@^3.23.8",
+    "zod-validation-error": "npm:zod-validation-error@^3.4.0"
   },
   "tasks": {
     "start": "deno run --allow-env --allow-net  main.ts",
@@ -13,6 +15,6 @@
   "compilerOptions": {
     "jsx": "precompile",
     "jsxImportSource": "hono/jsx",
-    "experimentalDecorators": true 
+    "experimentalDecorators": true
   }
 }

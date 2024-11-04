@@ -1,41 +1,41 @@
 import { Hono } from "hono";
-import { bearerAuth } from "hono/bearer-auth";
+// import { bearerAuth } from "hono/bearer-auth";
 import { container, Instances } from "./libs/config/container.ts";
-import type { IVocabularyService } from "./libs/service/vocabulary.service.ts";
+import type { IVocabularyService } from "./libs/mod/vocabulary/service.ts";
+import authRoutes from "./libs/mod/auth/routes.ts";
+import vocabularyRoutes from "./libs/mod/vocabulary/routes.ts";
 
-const readToken = "read";
-const prvilegedToekn = "read+write";
-const privilegedMethods = ["POST", "PUT", "PATCH", "DELETE"];
+// const readToken = "read";
+// const prvilegedToekn = "read+write";
+// const privilegedMethods = ["POST", "PUT", "PATCH", "DELETE"];
 
 const app = new Hono();
 
-const brearer = bearerAuth({ token: [readToken, prvilegedToekn] });
-app.on("GET", "/api/*", (c, next) => {
-  return brearer(c, next);
-});
-
-app.on(privilegedMethods, "/api/*", (c, next) => {
-  const bearer = bearerAuth({ token: prvilegedToekn });
-  return bearer(c, next);
-});
-
-// app.get("/api/page/x", async (c) => {
-//   // const res = await translate("antecedent")
-//   // return c.json(res);
+// const brearer = bearerAuth({ token: [readToken, prvilegedToekn] });
+// app.on("GET", "/api/*", (c, next) => {
+//   return brearer(c, next);
 // });
 
-app.post("/api/vocabulary", async (c) => {
-  const body = await c.req.json<{ word: string }>();
-  console.log("body", body.word);
-  const srv = container.get<IVocabularyService>(Instances.VocabularyService); 
-  // const srv = new VocabularyService(
-  //   new VocabularyRepository(),
-  //   new OpenAIAPI()
-  // );
-  const res = await srv.insert(body.word);
-  console.log("res", res);
-  return c.json(res);
-});
+// app.on(privilegedMethods, "/api/*", (c, next) => {
+//   const bearer = bearerAuth({ token: prvilegedToekn });
+//   return bearer(c, next);
+// });
+
+// app.get("/api/auth", async (c) => {
+//   const srv = container.get<IVocabularyService>(Instances.VocabularyService);
+//   const res = await srv.auth();
+//   return c.json(res);
+// });
+
+// app.post("/api/get-user", async (c) => {
+//   const body = await c.req.json<{ token: string }>();
+//   const srv = container.get<IVocabularyService>(Instances.VocabularyService);
+//   const res = await srv.getUser(body.token);
+//   return c.json(res);
+// })
+
+app.route("api/auth", authRoutes);
+app.route("/api/vocabulary", vocabularyRoutes);
 
 // app.use(
 //   bodyLimit({
