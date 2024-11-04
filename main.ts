@@ -3,6 +3,7 @@ import { Hono } from "hono";
 import { container, Instances } from "./libs/config/container.ts";
 import type { IVocabularyService } from "./libs/mod/vocabulary/service.ts";
 import authRoutes from "./libs/mod/auth/routes.ts";
+import vocabularyRoutes from "./libs/mod/vocabulary/routes.ts";
 
 // const readToken = "read";
 // const prvilegedToekn = "read+write";
@@ -33,20 +34,8 @@ const app = new Hono();
 //   return c.json(res);
 // })
 
-app.route("/auth", authRoutes);
-
-app.post("/api/vocabulary", async (c) => {
-  const body = await c.req.json<{ word: string }>();
-  console.log("body", body.word);
-  const srv = container.get<IVocabularyService>(Instances.VocabularyService);
-  // const srv = new VocabularyService(
-  //   new VocabularyRepository(),
-  //   new OpenAIAPI()
-  // );
-  const res = await srv.insert(body.word);
-  console.log("res", res);
-  return c.json(res);
-});
+app.route("api/auth", authRoutes);
+app.route("/api/vocabulary", vocabularyRoutes);
 
 // app.use(
 //   bodyLimit({

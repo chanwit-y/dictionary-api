@@ -1,4 +1,4 @@
-import type { AuthTokenResponsePassword } from "@supabase/supabase-js";
+import type { AuthTokenResponsePassword, UserResponse } from "@supabase/supabase-js";
 import { IUserRepository } from './repository.ts';
 import { inject, injectable } from "inversify";
 
@@ -9,6 +9,7 @@ type User = {
 
 export interface IUserService {
   signIn(username: string, password: string): Promise<AuthTokenResponsePassword>;
+  getUser(token: string): Promise<UserResponse>;
 }
 
 @injectable()
@@ -22,6 +23,10 @@ export class UserService implements IUserService {
 
   public async signIn(username: string, password: string) {
     return await this._repo.signIn(username, password);
+  }
+
+  public async getUser(token: string) {
+    return await this._repo.getUser(token);
   }
 
   // public async insert(u: User) {

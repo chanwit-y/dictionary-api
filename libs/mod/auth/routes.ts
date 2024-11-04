@@ -24,7 +24,7 @@ const authRoutes = new Hono().post(
     }
     setCookie(c, "access_token", data.session.access_token);
 
-    return c.json(data.user);
+    return c.json(data);
   }
 );
 
