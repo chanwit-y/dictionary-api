@@ -8,6 +8,9 @@ const authMiddleware: MiddlewareHandler = async (c, next) => {
   if (accessToken) {
     const srv = container.get<IUserService>(Instances.UserService);
     const { data, error } = await srv.getUser(accessToken);
+//     console.log(accessToken);
+    console.log(data);
+    console.log(error);
     if (data.user) {
       c.set("user", { ...data });
     }
