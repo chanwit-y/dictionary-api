@@ -1,7 +1,7 @@
 import type { AuthTokenResponsePassword, SupabaseClient, UserResponse } from "@supabase/supabase-js";
 
 import { injectable } from "inversify";
-import { supabase } from "../../db/index.ts";
+import { supabase } from "../../utils/db/index.ts";
 
 export interface IUserRepository {
 //   auth(): Promise<any>;

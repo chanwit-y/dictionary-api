@@ -1,9 +1,9 @@
 import { IUserService } from "./service.ts";
 import { Hono } from "hono";
 import { setCookie } from "hono/cookie";
-import { zValidator } from "../../middleware/zodValidator.middleware.ts";
+import { zValidator } from "../../utils/middleware/zodValidator.middleware.ts";
 import { z } from "zod";
-import { container, Instances } from "../../config/container.ts";
+import { container, Instances } from "../../utils/config/container.ts";
 
 const authRoutes = new Hono().post(
   "/sign-in",

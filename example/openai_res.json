@@ -11,7 +11,7 @@
 				"content": "- แปลเป็นภาษาไทย: บรรพบุรุษ, สิ่งที่มาก่อน\n- คำอ่านในภาษาอังกฤษ: แอน-ติ-ซี-เดนท์\n- ประเภทของคำ: คำนาม (Noun)\n- ตัวอย่างประโยคในภาษาอังกฤษ: In grammar, the noun \"dog\" is the antecedent of the pronoun \"it\" in the sentence \"The dog chased its tail.\"",
 				"refusal": null
 			},
-			"logprobs": null,
+		"logprobs": null,
 			"finish_reason": "stop"
 		}
 	],

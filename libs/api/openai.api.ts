@@ -1,6 +1,6 @@
 import { injectable  } from "inversify";
 import OpenAI from "openai";
-import { Env } from "../config/index.ts";
+import { Env } from "../utils/config/index.ts";
 
 const openai = new OpenAI({
   apiKey: Env.openaiApiKey,

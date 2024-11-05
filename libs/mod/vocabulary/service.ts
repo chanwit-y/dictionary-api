@@ -1,14 +1,12 @@
+import { transform } from './../../utils/common/transform.ts';
 import { injectable, inject } from "inversify";
-import type { IVocabularyRepository, VocabularyRepository } from "./repository.ts";
+import type { IVocabularyRepository } from "./repository.ts";
 import { OpenAIAPI } from "../../api/openai.api.ts";
 
 import "reflect-metadata";
 
 export interface IVocabularyService {
   insert(word: string): Promise<any>;
-  // TODO: move to auth service file
-  // auth(): Promise<any>;
-  // getUser(token: string): Promise<any>;
 }
 
 @injectable()
@@ -42,10 +40,19 @@ export class VocabularyService implements IVocabularyService {
       console.log(`call openai: ${word}`);
       const res = await this._openai.translate(word);
       const content = res.choices[0].message.content ?? "";
+      const {thai, english, example, type, remark} = transform(content);
+      console.log("==============")
+      console.log(content)
+      // console.log(data);
+      console.log("==============")
       vocabulary = await this._repo.insert({
         word,
         content,
-        remark: "auto",
+        remark,
+        thai,
+        english,
+        type,
+        example,
       });
     }
     return vocabulary;
