@@ -1,14 +1,14 @@
 import { Hono } from "hono";
 // import { bearerAuth } from "hono/bearer-auth";
-import { container, Instances } from "./libs/config/container.ts";
-import type { IVocabularyService } from "./libs/mod/vocabulary/service.ts";
+// import { container, Instances } from "./libs/config/container.ts";
+// import type { IVocabularyService } from "./libs/mod/vocabulary/service.ts";
 import authRoutes from "./libs/mod/auth/routes.ts";
 import vocabularyRoutes from "./libs/mod/vocabulary/routes.ts";
-import authMiddleware from "./libs/middleware/auth.middleware.ts";
+// import authMiddleware from "./libs/middleware/auth.middleware.ts";
 
 // const readToken = "read";
 // const prvilegedToekn = "read+write";
-const privilegedMethods = ["POST", "PUT", "PATCH", "DELETE"];
+// const privilegedMethods = ["POST", "PUT", "PATCH", "DELETE"];
 
 const app = new Hono();
 

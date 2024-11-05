@@ -1,7 +1,7 @@
-import { IUserService } from "./../mod/auth/service.ts";
 import { MiddlewareHandler } from "hono";
 import { getCookie } from "hono/cookie";
 import { container, Instances } from "../config/container.ts";
+import type { IUserService } from "../../mod/auth/service.ts";
 
 const authMiddleware: MiddlewareHandler = async (c, next) => {
   const accessToken = getCookie(c, "access_token");
