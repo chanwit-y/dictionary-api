@@ -1,16 +1,9 @@
-import { IUserRepository } from "./../mod/auth/repository.ts";
 import { Container } from "inversify";
-import {
-  VocabularyRepository,
-  type IVocabularyRepository,
-} from "../mod/vocabulary/repository.ts";
-import { OpenAIAPI } from "../api/openai.api.ts";
-import {
-  VocabularyService,
-  type IVocabularyService,
-} from "../mod/vocabulary/service.ts";
-import { UserRepository } from "../mod/auth/repository.ts";
-import { UserService, type IUserService } from "../mod/auth/service.ts";
+import { VocabularyRepository, type IVocabularyRepository } from "../../mod/vocabulary/repository.ts";
+import { OpenAIAPI } from "../../api/openai.api.ts";
+import { VocabularyService, type IVocabularyService } from "../../mod/vocabulary/service.ts";
+import { UserRepository, type IUserRepository } from "../../mod/auth/repository.ts";
+import { UserService, type IUserService } from "../../mod/auth/service.ts";
 
 enum Instances {
   OpenAIAPI = "OpenAIAPI",
