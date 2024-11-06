@@ -41,10 +41,10 @@ export class VocabularyService implements IVocabularyService {
       const res = await this._openai.translate(word);
       const content = res.choices[0].message.content ?? "";
       const {thai, english, example, type, remark} = transform(content);
-      console.log("==============")
-      console.log(content)
-      // console.log(data);
-      console.log("==============")
+      // console.log("==============")
+      // console.log(content)
+      // // console.log(data);
+      // console.log("==============")
       vocabulary = await this._repo.insert({
         word,
         content,
