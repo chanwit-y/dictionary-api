@@ -1,7 +1,8 @@
+import { SupabaseDB } from './../../utils/db/index.ts';
 import type { AuthTokenResponsePassword, SupabaseClient, UserResponse } from "@supabase/supabase-js";
 
-import { injectable } from "inversify";
-import { supabase } from "../../utils/db/index.ts";
+import { inject, injectable } from "inversify";
+import { Instances } from "../../utils/config/container.ts";
 
 export interface IUserRepository {
 //   auth(): Promise<any>;
@@ -11,9 +12,11 @@ export interface IUserRepository {
 
 @injectable()
 export class UserRepository implements IUserRepository {
-  private _db: SupabaseClient = supabase;
+  private _db: SupabaseClient;
 
-  constructor() {}
+  constructor(@inject("SupabaseDB") db: SupabaseDB) {
+    this._db = db.instance();
+  }
 
 //   public async auth() {
 //     return;

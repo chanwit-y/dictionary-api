@@ -1,9 +1,10 @@
+import { SupabaseDB } from './../../utils/db/index.ts';
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 
 import "reflect-metadata";
-import { supabase } from "../../utils/db/index.ts";
 import { Env } from "../../utils/config/index.ts";
+import { Instances } from "../../utils/config/container.ts";
 
 type TVocabulary = {
   word: string;
@@ -26,8 +27,10 @@ const TableName = "vocabulary";
 
 @injectable()
 export class VocabularyRepository implements IVocabularyRepository {
-  private _db: SupabaseClient = supabase;
-  constructor() {}
+  private _db: SupabaseClient;
+  constructor(@inject("SupabaseDB") db: SupabaseDB) {
+    this._db = db.instance();
+  }
 
   public async findAll() {
     const { data, error } = await this._db.from(TableName).select("*");
@@ -50,12 +53,7 @@ export class VocabularyRepository implements IVocabularyRepository {
     return data;
   }
   public async insert(v: TVocabulary) {
-    // TODO: Fix this
-    await this._db.auth.signInWithPassword({
-      email: Env.supabaseUser!,
-      password: Env.supabasePass!,
-      }); 
-    const { data, error } = await this._db.from(TableName).insert([{ ...v }]);
+    const { data, error } = await this._db.from(TableName).insert([{ ...v }]).select();
     if (error) {
       console.error(error);
       throw new Error(`Failed to insert word: ${error.message}`);
