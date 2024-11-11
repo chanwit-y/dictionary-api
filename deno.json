@@ -9,7 +9,7 @@
     "zod-validation-error": "npm:zod-validation-error@^3.4.0"
   },
   "tasks": {
-    "start": "deno run --allow-env --allow-net  main.ts",
+    "start": "deno run --allow-env --allow-net  --allow-write main.ts",
     "watch": "deno run --allow-net --watch main.ts"
   },
   "compilerOptions": {

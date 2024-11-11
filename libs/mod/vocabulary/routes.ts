@@ -10,6 +10,14 @@ const vocabularyRoutes = new Hono()
     const srv = container.get<IVocabularyService>(Instances.VocabularyService);
     const res = await srv.insert(body.word);
     return c.json(res);
+  })
+  .get("/speech", async (c) => {
+    const text = await c.req.query("text");
+    if(!text) return c.json({ error: "text is required" }, 400);
+
+    const srv = container.get<IVocabularyService>(Instances.VocabularyService);
+    const res = await srv.speech(text);
+    return c.json(res);
   });
 
 export default vocabularyRoutes;

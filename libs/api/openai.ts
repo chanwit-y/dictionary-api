@@ -1,6 +1,10 @@
-import { injectable  } from "inversify";
+import { injectable } from "inversify";
 import OpenAI from "openai";
 import { Env } from "../utils/config/index.ts";
+// import path from "node:path";
+
+// import { Buffer } from "node:buffer";
+// import fs from "node:fs";
 
 const openai = new OpenAI({
   apiKey: Env.openaiApiKey,
@@ -31,5 +35,16 @@ export class OpenAIAPI {
         type: "text",
       },
     });
+  }
+
+  public async speech(text: string) {
+    const res = await openai.audio.speech.create({
+      model: "tts-1",
+      voice: "alloy",
+      input: text,
+    });
+
+    return res
+    // console.log(mp3);
   }
 }
