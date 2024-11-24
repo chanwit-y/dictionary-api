@@ -30,9 +30,12 @@ export class VocabularyService implements IVocabularyService {
   public async speech(text: string): Promise<any> {
     const res = await this._openai.speech(text);
 
-    const speechFile = path.resolve(`./sound/${text}.mp3`);
+    // const speechFile = path.resolve(`./sound/${text}.mp3`);
     const buffer = Buffer.from(await res.arrayBuffer());
-    await fs.promises.writeFile(speechFile, buffer);
+    return await this._repo.upload(`${text}.mp3`,buffer);
+    // await fs.promises.writeFile(speechFile, buffer);
+    // const fileBody = new File([buffer], `${text}.mp3`, { type: "audio/mpeg" });
+    // return fileBody;
   }
 
   // public async auth() {

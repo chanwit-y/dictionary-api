@@ -11,7 +11,7 @@ const vocabularyRoutes = new Hono()
     const res = await srv.insert(body.word);
     return c.json(res);
   })
-  .get("/speech", async (c) => {
+  .post("/speech", async (c) => {
     const text = await c.req.query("text");
     if(!text) return c.json({ error: "text is required" }, 400);
 
