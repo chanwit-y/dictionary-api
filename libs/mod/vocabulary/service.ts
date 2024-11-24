@@ -52,19 +52,12 @@ export class VocabularyService implements IVocabularyService {
       console.log(`call openai: ${word}`);
       const res = await this._openai.translate(word);
       const content = res.choices[0].message.content ?? "";
-      const { thai, english, example, type, remark } = transform(content);
-      // console.log("==============")
-      // console.log(content)
-      // // console.log(data);
-      // console.log("==============")
+      console.log(content);
+
       vocabulary = await this._repo.insert({
-        word,
+        ...JSON.parse(content),
         content,
-        remark,
-        thai,
-        english,
-        type,
-        example,
+        remark: "-",
       });
     }
     return vocabulary;

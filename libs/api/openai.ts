@@ -20,8 +20,8 @@ export class OpenAIAPI {
           role: "user",
           content: [
             {
+              text: `ตอบกลับเป็น json\n{\n   "word": "${word}",\n   "thai": "...", //แปลคำว่า ${word} เป็นภาษาไทยของคำว่า \n   "english": "...", //คำอ่านและการออกเสียง obse${word}ssion เป็นภาษาไทย\n   "type": "...", //ประเภทของคำของคำว่า ${word}\n   "examples": [...], //ตัวอย่างการใช้คำว่า ${word} ในประเภทคำต่างๆ\n}`,
               type: "text",
-              text: `คำว่า ${word}  \n- แปลเป็นภาษาไทย\n- คำอ่านในภาษาอังกฤษ\n- ประเภทของคำ \n- ยกตัวอย่างประโยชเป็นภาษาอังกฤษ`,
             },
           ],
         },
@@ -32,7 +32,7 @@ export class OpenAIAPI {
       frequency_penalty: 0,
       presence_penalty: 0,
       response_format: {
-        type: "text",
+        type: "json_object",
       },
     });
   }
@@ -44,7 +44,7 @@ export class OpenAIAPI {
       input: text,
     });
 
-    return res
+    return res;
     // console.log(mp3);
   }
 }
