@@ -3,7 +3,6 @@ import {
   VocabularyRepository,
   type IVocabularyRepository,
 } from "../../mod/vocabulary/repository.ts";
-import { OpenAIAPI } from "../../api/openai.api.ts";
 import {
   VocabularyService,
   type IVocabularyService,
@@ -14,6 +13,7 @@ import {
 } from "../../mod/auth/repository.ts";
 import { UserService, type IUserService } from "../../mod/auth/service.ts";
 import { SupabaseDB, type ISupabaseDB } from "../db/index.ts";
+import { OpenAIAPI } from "../../api/openai.ts";
 
 enum Instances {
   SupabaseDB = "SupabaseDB",

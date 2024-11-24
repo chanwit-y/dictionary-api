@@ -1,12 +1,17 @@
-import { transform } from './../../utils/common/transform.ts';
+import { transform } from "./../../utils/common/transform.ts";
 import { injectable, inject } from "inversify";
 import type { IVocabularyRepository } from "./repository.ts";
-import { OpenAIAPI } from "../../api/openai.api.ts";
 
 import "reflect-metadata";
+import type { OpenAIAPI } from "../../api/openai.ts";
+
+import fs from "node:fs";
+import path from "node:path";
+import { Buffer } from "node:buffer";
 
 export interface IVocabularyService {
   insert(word: string): Promise<any>;
+  speech(text: string): Promise<any>;
 }
 
 @injectable()
@@ -21,6 +26,13 @@ export class VocabularyService implements IVocabularyService {
   ) {
     this._repo = repo;
     this._openai = openai;
+  }
+  public async speech(text: string): Promise<any> {
+    const res = await this._openai.speech(text);
+
+    const speechFile = path.resolve(`./sound/${text}.mp3`);
+    const buffer = Buffer.from(await res.arrayBuffer());
+    await fs.promises.writeFile(speechFile, buffer);
   }
 
   // public async auth() {
@@ -40,19 +52,12 @@ export class VocabularyService implements IVocabularyService {
       console.log(`call openai: ${word}`);
       const res = await this._openai.translate(word);
       const content = res.choices[0].message.content ?? "";
-      const {thai, english, example, type, remark} = transform(content);
-      // console.log("==============")
-      // console.log(content)
-      // // console.log(data);
-      // console.log("==============")
+      console.log(content);
+
       vocabulary = await this._repo.insert({
-        word,
+        ...JSON.parse(content),
         content,
-        remark,
-        thai,
-        english,
-        type,
-        example,
+        remark: "-",
       });
     }
     return vocabulary;

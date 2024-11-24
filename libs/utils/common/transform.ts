@@ -4,7 +4,7 @@ export const transform = (content: string) => {
       //     console.log("p", p);
       //     console.log("c", c.split(":"));
       const [k, v] = c.split(":");
-      return { ...p, [key(k)]: v.trim() };
+      return { ...p, [key(k)]: (v ?? "").trim() };
     },
     {
       thai: "",
