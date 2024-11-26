@@ -58,6 +58,7 @@ export class VocabularyService implements IVocabularyService {
   public async findByWord(word: string): Promise<TVocabulary[]> {
     try {
       const v = await this._repo.findByWord(word);
+      // console.log("find by word",v);
       return v;
     } catch (error) {
       console.error(error);

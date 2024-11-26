@@ -56,7 +56,9 @@ export class VocabularyRepository implements IVocabularyRepository {
   }
 
   public async findByWord(word: string) {
+    console.log("find by word", `${word}`);
     try {
+      await this._db.auth.refreshSession();
       const { data, error } = await this._db
         .from(TableName)
         .select("*")
@@ -74,7 +76,7 @@ export class VocabularyRepository implements IVocabularyRepository {
 
   public async insert(v: TVocabulary) {
     try {
-      await this._db.auth.reauthenticate();
+      await this._db.auth.refreshSession();
       const { data, error } = await this._db
         .from(TableName)
         .insert([{ ...v, type: "", remark: "" }])
