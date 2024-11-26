@@ -67,6 +67,7 @@ export class VocabularyService implements IVocabularyService {
   }
 
   public async newWord(word: string): Promise<TVocabulary[]> {
+    //TODO: check word is A-Z only
     try {
       const v = await this.findByWord(word);
       if (v.length > 0) return v;
