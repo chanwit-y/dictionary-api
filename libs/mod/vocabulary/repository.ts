@@ -4,24 +4,13 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { inject, injectable } from "inversify";
 
 import "reflect-metadata";
-import { Env } from "../../utils/config/index.ts";
-import { Instances } from "../../utils/config/container.ts";
-
-type TVocabulary = {
-  word: string;
-  content: string;
-  remark: string;
-  thai: string;
-  english: string;
-  type: string;
-  example: string;
-};
+import type { TUpload, TVocabulary } from "./@types/index.ts";
 
 export interface IVocabularyRepository {
   findAll(): Promise<unknown>;
-  findByWord(word: string): Promise<any[]>;
-  insert(v: TVocabulary): Promise<unknown>;
-  upload(n: string, b: Buffer): Promise<any>;
+  findByWord(word: string): Promise<TVocabulary[]>;
+  insert(v: TVocabulary): Promise<TVocabulary[]>;
+  upload(n: string, b: Buffer): Promise<TUpload>;
 }
 
 const TableName = "vocabulary";
@@ -32,50 +21,71 @@ export class VocabularyRepository implements IVocabularyRepository {
   constructor(@inject("SupabaseDB") db: SupabaseDB) {
     this._db = db.instance();
   }
-  public async upload(n: string,b: Buffer): Promise<any> {
-    
-    const { data, error } = await this._db.storage
-      .from("speech")
-      .upload(`${n}`, b, {
-        cacheControl: "3600",
-        // upsert: false,
-      });
-    if (error) {
+
+  public async upload(name: string, buff: Buffer): Promise<TUpload> {
+    try {
+      const { data, error } = await this._db.storage
+        .from("speech")
+        .upload(`${name}`, buff, {
+          cacheControl: "3600",
+        });
+      if (error) {
+        console.error(error);
+        throw new Error(`Failed to upload file: ${error.message}`);
+      }
+      return data;
+    } catch (error) {
       console.error(error);
-      throw new Error(`Failed to upload file: ${error.message}`);
+      throw new Error(`Failed to upload file: ${error}`);
     }
-    return data;
   }
 
   public async findAll() {
-    const { data, error } = await this._db.from(TableName).select("*");
-    if (error) {
-      console.log(error);
-      return error;
+    try {
+      const { data, error } = await this._db.from(TableName).select("*");
+      if (error) {
+        console.log(error);
+        return error;
+      }
+      return data;
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to find all words: ${error}`);
     }
-    return data;
   }
 
   public async findByWord(word: string) {
-    const { data, error } = await this._db
-      .from(TableName)
-      .select("*")
-      .eq("word", word);
-    if (error) {
-      console.log(error);
-      throw new Error(`Failed to find word: ${error.message}`);
-    }
-    return data;
-  }
-  public async insert(v: TVocabulary) {
-    const { data, error } = await this._db
-      .from(TableName)
-      .insert([{ ...v }])
-      .select();
-    if (error) {
+    try {
+      const { data, error } = await this._db
+        .from(TableName)
+        .select("*")
+        .eq("word", word);
+      if (error) {
+        console.log(error);
+        throw new Error(`Failed to find word: ${error.message}`);
+      }
+      return data;
+    } catch (error) {
       console.error(error);
-      throw new Error(`Failed to insert word: ${error.message}`);
+      throw new Error(`Failed to find word: ${error}`);
     }
-    return data;
+  }
+
+  public async insert(v: TVocabulary) {
+    try {
+      await this._db.auth.reauthenticate();
+      const { data, error } = await this._db
+        .from(TableName)
+        .insert([{ ...v, type: "", remark: "" }])
+        .select();
+      if (error) {
+        console.error(error);
+        throw new Error(`Failed to insert word: ${error.message}`);
+      }
+      return data;
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to insert word: ${error}`);
+    }
   }
 }

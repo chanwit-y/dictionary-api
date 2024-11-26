@@ -1,22 +1,20 @@
-import { transform } from "./../../utils/common/transform.ts";
 import { injectable, inject } from "inversify";
 import type { IVocabularyRepository } from "./repository.ts";
 
 import "reflect-metadata";
 import type { OpenAIAPI } from "../../api/openai.ts";
 
-import fs from "node:fs";
-import path from "node:path";
 import { Buffer } from "node:buffer";
+import type { TUpload, TVocabulary } from "./@types/index.ts";
 
 export interface IVocabularyService {
-  insert(word: string): Promise<any>;
-  speech(text: string): Promise<any>;
+  // insert(word: string): Promise<TVocabulary[]>;
+  // speech(text: string): Promise<TUpload>;
+  newWord(word: string): Promise<TVocabulary[]>;
 }
 
 @injectable()
 export class VocabularyService implements IVocabularyService {
-  // constructor(private _repo: VocabularyRepository, private _openai: OpenAIAPI) {}
   private _repo: IVocabularyRepository;
   private _openai: OpenAIAPI;
 
@@ -27,42 +25,58 @@ export class VocabularyService implements IVocabularyService {
     this._repo = repo;
     this._openai = openai;
   }
-  public async speech(text: string): Promise<any> {
+  private async _askAiForSpeech(text: string): Promise<TUpload> {
     const res = await this._openai.speech(text);
-
-    // const speechFile = path.resolve(`./sound/${text}.mp3`);
+    // console.log(res)
     const buffer = Buffer.from(await res.arrayBuffer());
-    return await this._repo.upload(`${text}.mp3`,buffer);
-    // await fs.promises.writeFile(speechFile, buffer);
-    // const fileBody = new File([buffer], `${text}.mp3`, { type: "audio/mpeg" });
-    // return fileBody;
+    return await this._repo.upload(`${text}.mp3`, buffer);
   }
 
-  // public async auth() {
-  //   const res = await this._repo.auth();
-  //   return res;
-  // }
-
-  // public async getUser(token: string) {
-  //   const res = await this._repo.getUser(token);
-  //   return res;
-  // }
-
-  public async insert(word: string) {
-    let vocabulary;
-    vocabulary = await this._repo.findByWord(word);
-    if (vocabulary.length === 0) {
-      console.log(`call openai: ${word}`);
+  private async _askAiForMeening(word: string): Promise<string> {
+    try {
       const res = await this._openai.translate(word);
       const content = res.choices[0].message.content ?? "";
-      console.log(content);
+      return content;
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to ask AI: ${error}`);
+    }
+  }
 
-      vocabulary = await this._repo.insert({
-        ...JSON.parse(content),
-        content,
+  private async _insert(data: TVocabulary): Promise<TVocabulary[]> {
+    try {
+      return await this._repo.insert({
+        ...data,
         remark: "-",
       });
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to insert word: ${error}`);
     }
-    return vocabulary;
+  }
+
+  public async findByWord(word: string): Promise<TVocabulary[]> {
+    try {
+      const v = await this._repo.findByWord(word);
+      return v;
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to check word: ${error}`);
+    }
+  }
+
+  public async newWord(word: string): Promise<TVocabulary[]> {
+    try {
+      const v = await this.findByWord(word);
+      if (v.length > 0) return v;
+      const content = await this._askAiForMeening(word);
+      const data: TVocabulary = JSON.parse(content);
+      const speech = await this._askAiForSpeech(word);
+      const res = await this._insert({ ...data, speech_url: speech.fullPath });
+      return res;
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to insert word: ${error}`);
+    }
   }
 }
