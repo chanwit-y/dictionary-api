@@ -27,6 +27,7 @@ export class VocabularyRepository implements IVocabularyRepository {
       const { data, error } = await this._db.storage
         .from("speech")
         .upload(`${name}`, buff, {
+          contentType: "audio/mpeg",
           cacheControl: "3600",
         });
       if (error) {
