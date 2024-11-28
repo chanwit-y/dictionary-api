@@ -1,3 +1,4 @@
+import { Env } from '../../utils/config/index.ts';
 import { injectable, inject } from "inversify";
 import type { IVocabularyRepository } from "./repository.ts";
 
@@ -10,6 +11,7 @@ import type { TUpload, TVocabulary } from "./@types/index.ts";
 export interface IVocabularyService {
   // insert(word: string): Promise<TVocabulary[]>;
   // speech(text: string): Promise<TUpload>;
+  get: () => Promise<TVocabulary[]>;
   newWord(word: string): Promise<TVocabulary[]>;
 }
 
@@ -45,6 +47,7 @@ export class VocabularyService implements IVocabularyService {
 
   private async _insert(data: TVocabulary): Promise<TVocabulary[]> {
     try {
+      console.log(data);
       return await this._repo.insert({
         ...data,
         remark: "-",
@@ -58,6 +61,7 @@ export class VocabularyService implements IVocabularyService {
   public async findByWord(word: string): Promise<TVocabulary[]> {
     try {
       const v = await this._repo.findByWord(word);
+      // console.log("find by word",v);
       return v;
     } catch (error) {
       console.error(error);
@@ -65,14 +69,28 @@ export class VocabularyService implements IVocabularyService {
     }
   }
 
+  public async get(): Promise<TVocabulary[]> {
+    try {
+      return await this._repo.findAll();
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to get all words: ${error}`);
+    }
+  }
+
   public async newWord(word: string): Promise<TVocabulary[]> {
     try {
+      if (!/^[a-zA-Z]+$/.test(word)) {
+        throw new Error("Word must contain only A-Z and a-z characters");
+      }
       const v = await this.findByWord(word);
       if (v.length > 0) return v;
       const content = await this._askAiForMeening(word);
+      if(content === "") throw new Error("Failed to get content from AI");
       const data: TVocabulary = JSON.parse(content);
       const speech = await this._askAiForSpeech(word);
-      const res = await this._insert({ ...data, speech_url: speech.fullPath });
+      if (!speech.fullPath) throw new Error("Failed to get speech");
+      const res = await this._insert({ ...data, content, speech_url: `${Env.supabaseBucketUrl}/${speech.fullPath}`  });
       return res;
     } catch (error) {
       console.error(error);

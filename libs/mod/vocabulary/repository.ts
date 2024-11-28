@@ -7,7 +7,7 @@ import "reflect-metadata";
 import type { TUpload, TVocabulary } from "./@types/index.ts";
 
 export interface IVocabularyRepository {
-  findAll(): Promise<unknown>;
+  findAll(): Promise<TVocabulary[]>;
   findByWord(word: string): Promise<TVocabulary[]>;
   insert(v: TVocabulary): Promise<TVocabulary[]>;
   upload(n: string, b: Buffer): Promise<TUpload>;
@@ -27,6 +27,7 @@ export class VocabularyRepository implements IVocabularyRepository {
       const { data, error } = await this._db.storage
         .from("speech")
         .upload(`${name}`, buff, {
+          contentType: "audio/mpeg",
           cacheControl: "3600",
         });
       if (error) {
@@ -40,12 +41,12 @@ export class VocabularyRepository implements IVocabularyRepository {
     }
   }
 
-  public async findAll() {
+  public async findAll(): Promise<TVocabulary[]> {
     try {
       const { data, error } = await this._db.from(TableName).select("*");
       if (error) {
         console.log(error);
-        return error;
+        throw new Error(`Failed to find all words: ${error.message}`);
       }
       return data;
     } catch (error) {
@@ -56,6 +57,7 @@ export class VocabularyRepository implements IVocabularyRepository {
 
   public async findByWord(word: string) {
     try {
+      await this._db.auth.refreshSession();
       const { data, error } = await this._db
         .from(TableName)
         .select("*")
@@ -73,10 +75,10 @@ export class VocabularyRepository implements IVocabularyRepository {
 
   public async insert(v: TVocabulary) {
     try {
-      await this._db.auth.reauthenticate();
+      await this._db.auth.refreshSession();
       const { data, error } = await this._db
         .from(TableName)
-        .insert([{ ...v, type: "", remark: "" }])
+        .insert([{ ...v }])
         .select();
       if (error) {
         console.error(error);
