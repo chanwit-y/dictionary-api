@@ -7,4 +7,5 @@ export const Env = {
   supabaseToken: Deno.env.get("SUPABASE_TOKEN"),
   supabaseUser: Deno.env.get("SUPABASE_USER"),
   supabasePass: Deno.env.get("SUPABASE_PASS"),
+  supabaseBucketUrl: Deno.env.get("SUPABASE_BUCKET_URL"),
 };

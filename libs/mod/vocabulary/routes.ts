@@ -5,10 +5,15 @@ import authMiddleware from "../../utils/middleware/auth.middleware.ts";
 
 const vocabularyRoutes = new Hono()
   .use("*", authMiddleware)
-  .post("/create", async (c) => {
+  .post("/", async (c) => {
     const body = await c.req.json<{ word: string }>();
     const srv = container.get<IVocabularyService>(Instances.VocabularyService);
     const res = await srv.newWord(body.word);
+    return c.json(res);
+  })
+  .get("/", async (c) => {
+    const srv = container.get<IVocabularyService>(Instances.VocabularyService);
+    const res = await srv.get();
     return c.json(res);
   })
   // .post("/speech", async (c) => {
