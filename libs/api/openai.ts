@@ -21,7 +21,7 @@ export class OpenAIAPI {
           content: [
             {
               text: `ตอบกลับเป็น json\n{\n   "word": "${word}",\n   "thai": "...", //แปลคำว่า ${word} เป็นภาษาไทยของคำว่า \n   "english": "...", //คำอ่านและการออกเสียง ${word} เป็นภาษาไทย\n   "types": [...], //ประเภทของคำของคำว่า ${word}\n   "examples": [...], //ตัวอย่างการใช้คำว่า ${word} ในประเภทคำต่างๆ แค่ sentence เท่านั้น\n}`,
-              type: "text",
+              type: "text", // Change to json type
             },
           ],
         },
